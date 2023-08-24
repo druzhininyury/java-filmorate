@@ -24,10 +24,6 @@ public class FilmController {
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) throws ValidationException {
-        if (film.getId() != 0) {
-            log.warn("Film addition failed: the film has already ID.");
-            throw new ValidationException("The film has already ID.");
-        }
         if (!isFilmValid(film)) {
             log.warn("Film addition failed: film parameters are incorrect");
             throw new ValidationException("Film parameters are incorrect.");
@@ -40,10 +36,6 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) throws ValidationException {
-        if (film.getId() <= 0) {
-            log.warn("Film update failed: the film has no ID.");
-            throw new ValidationException("The film has no ID.");
-        }
         if (!isFilmValid(film)) {
             log.warn("Film update failed: film parameters are incorrect");
             throw new ValidationException("Film parameters are incorrect");

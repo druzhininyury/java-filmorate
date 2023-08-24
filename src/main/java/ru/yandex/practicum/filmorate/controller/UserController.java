@@ -26,10 +26,6 @@ public class UserController {
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) throws ValidationException {
-        if (user.getId() != 0) {
-            log.warn("User addition failed: The user has already ID.");
-            throw new ValidationException("The user has already ID.");
-        }
         user.setId(getNextId());
         users.put(user.getId(), user);
         if (user.getName() == null || user.getName().isEmpty()) {
@@ -41,10 +37,6 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) throws ValidationException {
-        if (user.getId() <= 0) {
-            log.warn("User update failed: the user has no ID.");
-            throw new ValidationException("The user has no ID.");
-        }
         if (!users.containsKey(user.getId())) {
             log.warn("User update failed: the user has unknown ID.");
             throw new ValidationException("The user has unknown ID.");
