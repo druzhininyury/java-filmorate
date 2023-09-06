@@ -17,13 +17,13 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
 
     @Override
-    public User addUser(User user){
+    public User addUser(User user) {
         user.setId(getNextId());
         return users.put(user.getId(), user);
     }
 
     @Override
-    public User updateUser(User user){
+    public User updateUser(User user) {
         if (!users.containsKey(user.getId())) {
             log.warn("User update failed, the user has unknown ID: " + user.getId());
             throw new IncorrectUserIdException("Unknown user id: " + user.getId());
