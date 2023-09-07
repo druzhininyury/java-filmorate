@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FilmServiceTest {
+class FilmServiceTest {
 
     @Test
-    public void filmValidationTest() {
+    void testFilmValidation() {
         Film film;
         film = new Film("Name", "Description", LocalDate.of(1870, 1, 1), 90);
         assertFalse(FilmService.isFilmValid(film));
         film = new Film("Name", "Description", LocalDate.of(1895, 12, 28), 90);
-        assertTrue(FilmService.isFilmValid(film));
+        assertTrue(FilmService.isFilmValid(film), "Film is not valid.");
     }
 }

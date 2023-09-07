@@ -17,10 +17,23 @@ public class InMemoryFilmStorage implements FilmStorage {
     private static int nextId = 1;
     private final Map<Integer, Film> films = new HashMap<>();
 
+    private static int getNextId() {
+        return nextId++;
+    }
+
     @Override
     public Film addFilm(Film film) {
         film.setId(getNextId());
         return films.put(film.getId(), film);
+    }
+
+    @Override
+    public Film removeFilm(int filmId) {
+        if (!films.containsKey(filmId)) {
+            log.warn("No film found, the film has unknown ID: " + filmId);
+            throw new IncorrectFilmIdException("Unknown film id: " + filmId);
+        }
+        return films.remove(filmId);
     }
 
     @Override
@@ -44,9 +57,5 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new IncorrectFilmIdException("Unknown film id: " + filmId);
         }
         return films.get(filmId);
-    }
-
-    private int getNextId() {
-        return nextId++;
     }
 }

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -20,6 +21,19 @@ public class InMemoryUserStorage implements UserStorage {
     public User addUser(User user) {
         user.setId(getNextId());
         return users.put(user.getId(), user);
+    }
+
+    private static int getNextId() {
+        return nextId++;
+    }
+
+    @Override
+    public User removeUser(int userId) {
+        if (!users.containsKey(userId)) {
+            log.warn("No user found, the user has unknown ID: " + userId);
+            throw new IncorrectUserIdException("Unknown user id: " + userId);
+        }
+        return users.remove(userId);
     }
 
     @Override
@@ -43,9 +57,5 @@ public class InMemoryUserStorage implements UserStorage {
             throw new IncorrectUserIdException("Unknown user id: " + userId);
         }
         return users.get(userId);
-    }
-
-    private int getNextId() {
-        return nextId++;
     }
 }

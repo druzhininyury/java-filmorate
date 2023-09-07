@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.ValidationException;
+import ru.yandex.practicum.filmorate.storage.IncorrectUserIdException;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class UserService {
             friend.removeFriend(userId);
             return user;
         } else {
-            throw new RuntimeException("No user with id=" + userId);
+            throw new IncorrectUserIdException("No user with id=" + userId);
         }
     }
 

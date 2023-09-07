@@ -8,6 +8,8 @@ public interface FilmStorage {
 
     Film addFilm(Film film);
 
+    Film removeFilm(int filmId);
+
     Film updateFilm(Film film);
 
     List<Film> getAllFilms();
