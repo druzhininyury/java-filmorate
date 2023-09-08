@@ -1,53 +1,65 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.ValidationException;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
 
-    private static int nextId = 1;
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable int userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GetMapping("/{userId}/friends")
+    public List<User> getAllUserFriends(@PathVariable int userId) {
+        return userService.getAllUserFriends(userId);
+    }
+
+    @GetMapping("/{userId}/friends/common/{otherUserId}")
+    public List<User> getCommonFriends(@PathVariable int userId, @PathVariable int otherUserId) {
+        return userService.getCommonFriends(userId, otherUserId);
     }
 
     @PostMapping
-    public User addUser(@Valid @RequestBody User user) throws ValidationException {
-        user.setId(getNextId());
-        users.put(user.getId(), user);
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        log.info("User added: " + user);
-        return user;
+    public User addUser(@Valid @RequestBody User user) {
+        return userService.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) throws ValidationException {
-        if (!users.containsKey(user.getId())) {
-            log.warn("User update failed: the user has unknown ID.");
-            throw new ValidationException("The user has unknown ID.");
-        }
-        users.put(user.getId(), user);
-        log.info("User updated: " + user);
-        return user;
+        return userService.updateUser(user);
     }
 
-    private int getNextId() {
-        return nextId++;
+    @PutMapping("/{userId}/friends/{friendId}")
+    public User addFriend(@PathVariable int userId, @PathVariable int friendId) {
+        return userService.addFriend(userId, friendId);
+    }
+
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public User removeFriend(@PathVariable int userId, @PathVariable int friendId) {
+        return userService.removeFriend(userId, friendId);
     }
 
 }
