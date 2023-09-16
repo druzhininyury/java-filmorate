@@ -2,4 +2,4 @@
 Filmorate project.
 
 ## Database
-!(database diagram)[/database_er.png]
+![database diagram](/database_er.png)
