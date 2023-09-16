@@ -4,7 +4,7 @@ Filmorate project.
 ## Database
 ![database diagram](/database_er.png)
 
-###Examples of usage:
+### Examples of usage:
 
 ```sql
 -- Get all films
