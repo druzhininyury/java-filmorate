@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -24,7 +26,7 @@ public class User {
     @NotNull
     @Past
     private LocalDate birthday;
-    private Set<Integer> friends = new HashSet<>();
+    private Map<Integer, FriendStatus> friends = new HashMap<>();
 
     public User(String email, String login, String name, LocalDate birthdate) {
         this.email = email;
@@ -34,10 +36,24 @@ public class User {
     }
 
     public void addFriend(int id) {
-        friends.add(id);
+        friends.put(id, FriendStatus.REQUEST);
+    }
+
+    public void requestFriendship(int id) {
+        friends.put(id, FriendStatus.REQUESTED);
+    }
+
+    public void confirmFriend(int id) {
+        friends.put(id, FriendStatus.CONFIRMED);
     }
 
     public void removeFriend(int id) {
         friends.remove(id);
+    }
+
+    public enum FriendStatus {
+        CONFIRMED,
+        REQUESTED,
+        REQUEST;
     }
 }

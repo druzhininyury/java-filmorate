@@ -20,6 +20,8 @@ public class Film {
     @Positive
     private int duration;
     private Set<Integer> likes = new HashSet<>();
+    private Genre genre;
+    private Rating rating;
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {
         this.name = name;
@@ -34,5 +36,22 @@ public class Film {
 
     public void removeLike(int userId) {
         likes.remove(userId);
+    }
+
+    public enum Genre {
+        COMEDY,
+        DRAMA,
+        CARTOON,
+        THRILLER,
+        DOCUMENTARY,
+        ACTION;
+    }
+
+    public enum Rating {
+        G,
+        PG,
+        PG13,
+        R,
+        NC17;
     }
 }
