@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.ValidationException;
@@ -16,10 +17,11 @@ import java.util.Set;
 @Service
 public class UserService {
 
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -36,6 +38,10 @@ public class UserService {
         userStorage.updateUser(user);
         log.info("User updated: " + user);
         return user;
+    }
+
+    public User removeUser(int userId) {
+        return userStorage.removeUser(userId);
     }
 
     public List<User> getAllUsers() {
