@@ -6,21 +6,30 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.RatingStorage;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component("filmDbStorage")
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
+    private final GenreStorage genreStorage;
+    private final RatingStorage ratingStorage;
 
-    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, GenreStorage genreStorage, RatingStorage ratingStorage) {
         this.jdbcTemplate = jdbcTemplate;
+        this.genreStorage = genreStorage;
+        this.ratingStorage = ratingStorage;
     }
 
     @Override
@@ -73,8 +82,14 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(filmRows.getString("description"));
             film.setReleaseDate(filmRows.getDate("release_date").toLocalDate());
             film.setDuration(filmRows.getInt("duration"));
-            film.setGenre(Film.Genre.valueOf(filmRows.getString("genre")));
-            film.setRating(Film.Rating.valueOf(filmRows.getString("rating")));
+            Optional<Genre> genre = genreStorage.getGenreById(filmRows.getInt("genre"));
+            if (!genre.isEmpty()) {
+                film.setGenre(genre.get());
+            }
+            Optional<Rating> rating = ratingStorage.getRatingById(filmRows.getInt("rating"));
+            if (!rating.isEmpty()) {
+                film.setRating(rating.get());
+            }
             films.add(film);
         }
         return films;
@@ -90,8 +105,14 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(filmRows.getString("description"));
             film.setReleaseDate(filmRows.getDate("release_date").toLocalDate());
             film.setDuration(filmRows.getInt("duration"));
-            film.setGenre(Film.Genre.valueOf(filmRows.getString("genre")));
-            film.setRating(Film.Rating.valueOf(filmRows.getString("rating")));
+            Optional<Genre> genre = genreStorage.getGenreById(filmRows.getInt("genre"));
+            if (!genre.isEmpty()) {
+                film.setGenre(genre.get());
+            }
+            Optional<Rating> rating = ratingStorage.getRatingById(filmRows.getInt("rating"));
+            if (!rating.isEmpty()) {
+                film.setRating(rating.get());
+            }
             return film;
         } else {
             return null;

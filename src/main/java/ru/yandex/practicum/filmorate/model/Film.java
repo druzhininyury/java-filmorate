@@ -39,21 +39,4 @@ public class Film {
     public void removeLike(int userId) {
         likes.remove(userId);
     }
-
-    public enum Genre {
-        COMEDY,
-        DRAMA,
-        CARTOON,
-        THRILLER,
-        DOCUMENTARY,
-        ACTION;
-    }
-
-    public enum Rating {
-        G,
-        PG,
-        PG13,
-        R,
-        NC17;
-    }
 }
