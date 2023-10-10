@@ -49,23 +49,11 @@ public class UserService {
     }
 
     public User addFriend(int userId, int friendId) {
-        User user = userStorage.getUserById(userId);
-        User friend = userStorage.getUserById(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(userId);
-        return user;
+        return userStorage.addFriend(userId, friendId);
     }
 
     public User removeFriend(int userId, int friendId) {
-        User user = userStorage.getUserById(userId);
-        User friend = userStorage.getUserById(friendId);
-        if (user != null && friend != null) {
-            user.removeFriend(friendId);
-            friend.removeFriend(userId);
-            return user;
-        } else {
-            throw new IncorrectUserIdException("No user with id=" + userId);
-        }
+        return userStorage.removeFriend(userId, friendId);
     }
 
     public User getUserById(int userId) {
@@ -73,12 +61,7 @@ public class UserService {
     }
 
     public List<User> getAllUserFriends(int userId) {
-        Set<Integer> friendsIds = userStorage.getUserById(userId).getFriends().keySet();
-        List<User> friends = new ArrayList<>();
-        for (Integer friendId : friendsIds) {
-            friends.add(userStorage.getUserById(friendId));
-        }
-        return friends;
+        return userStorage.getAllFriends(userId);
     }
 
     public List<User> getCommonFriends(int user1Id, int user2Id) {
