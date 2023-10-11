@@ -5,8 +5,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
+import ru.yandex.practicum.filmorate.storage.IncorrectRatingIdException;
 import ru.yandex.practicum.filmorate.storage.RatingStorage;
 
 import java.sql.PreparedStatement;
@@ -38,6 +38,7 @@ public class RatingDbStorage implements RatingStorage {
 
     @Override
     public Optional<Rating> removeRatingById(int ratingId) {
+        checkIfRatingExists(ratingId);
         Optional<Rating> rating = getRatingById(ratingId);
         String sqlQuery = "DELETE FROM ratings WHERE id = ?;";
         jdbcTemplate.update(sqlQuery, ratingId);
@@ -46,6 +47,7 @@ public class RatingDbStorage implements RatingStorage {
 
     @Override
     public Optional<Rating> getRatingById(int ratingId) {
+        checkIfRatingExists(ratingId);
         String sqlQuery = "SELECT * FROM ratings WHERE id = ?;";
         SqlRowSet ratingRow = jdbcTemplate.queryForRowSet(sqlQuery, ratingId);
         if (ratingRow.next()) {
@@ -70,5 +72,14 @@ public class RatingDbStorage implements RatingStorage {
             ratings.add(rating);
         }
         return ratings;
+    }
+
+    private void checkIfRatingExists(int filmId) {
+        String sqlQueryCheckExistence = "SELECT COUNT(id) AS result FROM ratings WHERE id = ?;";
+        SqlRowSet responseRows = jdbcTemplate.queryForRowSet(sqlQueryCheckExistence, filmId);
+        responseRows.next();
+        if (responseRows.getInt("result") == 0) {
+            throw new IncorrectRatingIdException("Rating with id " + filmId + " doesn't exist.");
+        }
     }
 }

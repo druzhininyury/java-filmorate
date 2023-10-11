@@ -7,9 +7,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.IncorrectGenreIdException;
 
-import javax.sql.RowSet;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,7 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Optional<Genre> removeGenreById(int genreId) {
+        checkIfGenreExists(genreId);
         Optional<Genre> genre = getGenreById(genreId);
         String sqlQuery = "DELETE FROM genres WHERE id = ?;";
         jdbcTemplate.update(sqlQuery, genreId);
@@ -47,6 +47,7 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Optional<Genre> getGenreById(int genreId) {
+        checkIfGenreExists(genreId);
         String sqlQuery = "SELECT * FROM genres WHERE id = ?;";
         SqlRowSet genreRow = jdbcTemplate.queryForRowSet(sqlQuery, genreId);
         if (genreRow.next()) {
@@ -71,5 +72,14 @@ public class GenreDbStorage implements GenreStorage {
             genres.add(genre);
         }
         return genres;
+    }
+
+    private void checkIfGenreExists(int filmId) {
+        String sqlQueryCheckExistence = "SELECT COUNT(id) AS result FROM genres WHERE id = ?;";
+        SqlRowSet responseRows = jdbcTemplate.queryForRowSet(sqlQueryCheckExistence, filmId);
+        responseRows.next();
+        if (responseRows.getInt("result") == 0) {
+            throw new IncorrectGenreIdException("Genre with id " + filmId + " doesn't exist.");
+        }
     }
 }

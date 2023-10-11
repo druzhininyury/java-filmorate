@@ -30,7 +30,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User removeUser(int userId) {
         if (!users.containsKey(userId)) {
             log.warn("No user found, the user has unknown ID: " + userId);
-            throw new IncorrectUserIdException("Unknown user id: " + userId);
+            throw new IncorrectRatingIdException("Unknown user id: " + userId);
         }
         return users.remove(userId);
     }
@@ -39,7 +39,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(User user) {
         if (!users.containsKey(user.getId())) {
             log.warn("User update failed, the user has unknown ID: " + user.getId());
-            throw new IncorrectUserIdException("Unknown user id: " + user.getId());
+            throw new IncorrectRatingIdException("Unknown user id: " + user.getId());
         }
         return users.put(user.getId(), user);
     }
@@ -53,7 +53,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User getUserById(int userId) {
         if (!users.containsKey(userId)) {
             log.warn("No user found, the user has unknown ID: " + userId);
-            throw new IncorrectUserIdException("Unknown user id: " + userId);
+            throw new IncorrectRatingIdException("Unknown user id: " + userId);
         }
         return users.get(userId);
     }
@@ -71,5 +71,10 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> getAllFriends(int userId) {
         return null;
+    }
+
+    @Override
+    public void checkIfUserExists(int filmId) {
+
     }
 }

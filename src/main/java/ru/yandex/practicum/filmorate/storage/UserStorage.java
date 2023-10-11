@@ -21,4 +21,6 @@ public interface UserStorage {
     User removeFriend(int userId, int friendId);
 
     List<User> getAllFriends(int userId);
+
+    public void checkIfUserExists(int filmId);
 }

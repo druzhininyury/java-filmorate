@@ -1,14 +1,14 @@
-/*
+
 INSERT INTO genres (name) 
 VALUES
-	('COMEDY'), ('DRAMA'), ('CARTOON'), ('THRILLER'), ('DOCUMENTARY'), ('ACTION');
-*/
-/*
+	('Комедия'), ('Драма'), ('Мультфильм'), ('Триллер'), ('Документальный'), ('Боевик');
+
+
 INSERT INTO ratings (name)
 VALUES
-	('G'), ('PG'), ('PG13'), ('R'), ('NC17');
+	('G'), ('PG'), ('PG-13'), ('R'), ('NC-17');
 
-*/
+
 /*
 INSERT INTO users (email, login, name, birthday)
 VALUES

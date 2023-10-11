@@ -2,14 +2,13 @@ package ru.yandex.practicum.filmorate.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.IncorrectUserIdException;
+import ru.yandex.practicum.filmorate.storage.IncorrectRatingIdException;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.sql.Date;
@@ -125,12 +124,12 @@ public class UserDbStorage implements UserStorage {
         return friends;
     }
 
-    private void checkIfUserExists(int userId) {
+    public void checkIfUserExists(int userId) {
         String sqlQueryCheckExistence = "SELECT COUNT(id) AS result FROM users WHERE id = ?;";
         SqlRowSet responseRows = jdbcTemplate.queryForRowSet(sqlQueryCheckExistence, userId);
         responseRows.next();
         if (responseRows.getInt("result") == 0) {
-            throw new IncorrectUserIdException("User with id " + userId + " doesn't exist.");
+            throw new IncorrectRatingIdException("User with id " + userId + " doesn't exist.");
         }
     }
 }

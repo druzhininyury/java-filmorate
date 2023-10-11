@@ -55,7 +55,7 @@ public class FilmService {
         }
         filmStorage.updateFilm(film);
         log.info("Film updated: " + film);
-        return film;
+        return filmStorage.getFilmById(film.getId());
     }
 
     public Film removeFilm(int filmId) {
@@ -71,21 +71,18 @@ public class FilmService {
     }
 
     public Film addFilmLike(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
-        userStorage.getUserById(userId);
-        film.addLike(userId);
-        return film;
+        filmStorage.addLike(filmId, userId);
+        return filmStorage.getFilmById(filmId);
     }
 
     public Film removeFilmLike(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
-        userStorage.getUserById(userId);
-        film.removeLike(userId);
-        return film;
+        filmStorage.removeLike(filmId, userId);
+        return filmStorage.getFilmById(filmId);
     }
 
     public List<Film> getFilmsTop(int count) {
-        List<Film> top = filmStorage.getAllFilms().stream().sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
+        List<Film> top = filmStorage.getAllFilms().stream()
+                .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
                 .limit(count).collect(Collectors.toList());
         return top;
     }
