@@ -33,6 +33,14 @@ public class User {
         this.birthday = birthdate;
     }
 
+    public User(int id, String email, String login, String name, LocalDate birthdate) {
+        this.id = id;
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthdate;
+    }
+
     public void addFriend(int id) {
         friends.put(id, FriendStatus.REQUEST);
     }

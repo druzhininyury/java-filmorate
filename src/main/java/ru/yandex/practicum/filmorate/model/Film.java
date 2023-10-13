@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class Film {
 
     private int id;
@@ -19,15 +21,24 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
-    private Set<Integer> likes = new HashSet<>();
-    private Genre genre;
-    private Rating rating;
+    private int rate;
+    private Set<Integer> likes = new LinkedHashSet<>();
+    private Set<Genre> genres = new LinkedHashSet<>();
+    private Rating mpa;
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, int rate) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.rate = rate;
     }
 
     public void addLike(int userId) {
@@ -38,20 +49,11 @@ public class Film {
         likes.remove(userId);
     }
 
-    public enum Genre {
-        COMEDY,
-        DRAMA,
-        CARTOON,
-        THRILLER,
-        DOCUMENTARY,
-        ACTION;
+    public void addGenre(Genre genre) {
+        genres.add(genre);
     }
 
-    public enum Rating {
-        G,
-        PG,
-        PG13,
-        R,
-        NC17;
+    public void removeGenre(Genre genre) {
+        genres.remove(genre);
     }
 }

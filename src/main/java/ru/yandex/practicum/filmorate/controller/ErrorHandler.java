@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.model.ValidationException;
 import ru.yandex.practicum.filmorate.storage.IncorrectFilmIdException;
+import ru.yandex.practicum.filmorate.storage.IncorrectGenreIdException;
+import ru.yandex.practicum.filmorate.storage.IncorrectRatingIdException;
 import ru.yandex.practicum.filmorate.storage.IncorrectUserIdException;
 
 import java.util.Map;
@@ -31,4 +33,15 @@ public class ErrorHandler {
         return Map.of("error", e.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> incorrectGenreIdExceptionHandler(final IncorrectGenreIdException e) {
+        return Map.of("error", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> incorrectRatingIdExceptionHandler(final IncorrectRatingIdException e) {
+        return Map.of("error", e.getMessage());
+    }
 }
