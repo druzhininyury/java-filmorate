@@ -21,7 +21,7 @@ class FilmorateApplicationTests {
     private final UserDbStorage userStorage;
 
     @Test
-    public void testFindUserById() {
+    void testFindUserById() {
 
         Optional<User> userOptional = Optional.ofNullable(userStorage.getUserById(1));
 

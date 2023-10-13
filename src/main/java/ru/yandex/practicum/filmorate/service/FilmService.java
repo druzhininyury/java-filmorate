@@ -31,11 +31,7 @@ public class FilmService {
 
     public static boolean isFilmValid(Film film) {
         LocalDate releaseDate = film.getReleaseDate();
-        if (releaseDate != null && !releaseDate.isBefore(LocalDate.of(1895, 12, 28))) {
-            return true;
-        } else {
-            return false;
-        }
+        return releaseDate != null && !releaseDate.isBefore(LocalDate.of(1895, 12, 28));
     }
 
     public Film addFilm(Film film) throws ValidationException {
@@ -81,9 +77,8 @@ public class FilmService {
     }
 
     public List<Film> getFilmsTop(int count) {
-        List<Film> top = filmStorage.getAllFilms().stream()
+        return filmStorage.getAllFilms().stream()
                 .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
                 .limit(count).collect(Collectors.toList());
-        return top;
     }
 }

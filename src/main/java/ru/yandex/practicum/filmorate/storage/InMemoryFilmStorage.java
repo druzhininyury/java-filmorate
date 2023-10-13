@@ -61,16 +61,22 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(int filmId, int userId) {
-
+        if (films.containsKey(filmId)) {
+            films.get(filmId).addLike(userId);
+        }
     }
 
     @Override
     public void removeLike(int filmId, int userId) {
-
+        if (films.containsKey(filmId)) {
+            films.get(filmId).removeLike(userId);
+        }
     }
 
     @Override
     public void checkIfFilmExists(int filmId) {
-
+        if (!films.containsKey(filmId)) {
+            throw new IncorrectFilmIdException("No film with id=" + filmId);
+        }
     }
 }

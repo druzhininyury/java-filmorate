@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.IncorrectGenreIdException;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class GenreDbStorage implements GenreStorage {
     public Genre addGenre(Genre genre) {
         String sqlQuery = "INSERT INTO genres (name) VALUES (?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
+        jdbcTemplate.update((Connection connection) -> {
             PreparedStatement statement = connection.prepareStatement(sqlQuery, new String[]{"id"});
             statement.setString(1, genre.getName());
             return statement;

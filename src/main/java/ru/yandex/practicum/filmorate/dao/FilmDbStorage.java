@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -53,7 +54,11 @@ public class FilmDbStorage implements FilmStorage {
             statement.setInt(6, film.getMpa().getId());
             return statement;
         }, keyHolder);
-        film.setId((keyHolder.getKey().intValue()));
+        try {
+            film.setId((Objects.requireNonNull(keyHolder.getKey()).intValue()));
+        } catch (NullPointerException e) {
+            return null;
+        }
         if (film.getGenres().size() > 0) {
             StringBuilder sb = new StringBuilder("INSERT INTO films_genres (film_id, genre_id) VALUES");
             for (Genre genre : film.getGenres()) {

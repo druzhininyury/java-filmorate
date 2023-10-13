@@ -83,12 +83,11 @@ public class UserDbStorage implements UserStorage {
         checkIfUserExists(userId);
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE id = ?", userId);
         if (userRows.next()) {
-            User user = new User(userRows.getInt("id"),
+            return new User(userRows.getInt("id"),
                                  userRows.getString("email"),
                                  userRows.getString("login"),
                                  userRows.getString("name"),
                                  userRows.getDate("birthday").toLocalDate());
-            return user;
         } else {
             return null;
         }
